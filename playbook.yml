@@ -16,6 +16,7 @@
   - debug: var=rbd_create
   - name: Adding Target
     lineinfile: dest=/etc/tgt/targets.conf insertafter=EOF line='<target {{target_ip}}:iscsi>'
+  - name: Adding Target config
     lineinfile: dest=/etc/tgt/targets.conf insertafter=EOF line='\tdriver iscsi\n\tbs-type rbd\n\tbacking-store iscsi/iscsi-rbd\n\tinitiator-address {{target_ip}}\n</target>'
   - name: Updating TGT service
     service: name=tgt state=restarted
