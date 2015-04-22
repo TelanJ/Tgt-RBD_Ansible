@@ -1,20 +1,24 @@
 ---
-- hosts: default
-  sudo: true
+- hosts: one
   tasks:
-    sudo: yes
   - name: Install required packages
     apt: pkg={{item}}
     with_items:
       - tgt
     sudo: yes
-  - ceph_osd_pool: state=present name=iscsi pgnum=128 pgpnum=128
+  - name: Creating osd pool iscsi
+    ceph_osd_pool: state=present name=iscsi pgnum=128 pgpnum=128
     register: add_result
   - debug: var=add_result
-  - ceph: cmd=status
-    register: status
-  - debug: var=status
-  - ceph_rbd: name=iscsi-rbd state=present size={{rbd_size}} pool=iscsi
+  - name: Creating RBD image iscsi-rbd
+    ceph_rbd: name=iscsi-rbd state=present size={{rbd_size}} pool=iscsi
     register: rbd_create
   - debug: var=rbd_create
-  
+  - name: Adding Target
+    command: echo "<target 192.168.200.90:iscsi>" >> /etc/tgt/targets.conf
+    command: echo "     driver iscsi" >> /etc/tgt/targets.conf
+    command: echo "     bs-type rbd" >> /etc/tgt/targets.conf
+    command: echo "     backing-store iscsi/iscsi-rbd" >> /etc/tgt/targets.conf
+    command: echo "     initiator-address 192.168.200.90" + >> /etc/tgt/targets.conf
+    command: echo "</target>" >> /etc/tgt/targets.conf
+  - name: Updating TGT service
