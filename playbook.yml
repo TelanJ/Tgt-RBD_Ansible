@@ -23,6 +23,10 @@
       - "3"    
   - debug: var=rbd_create
   - name: Adding Target
-    template: src=./iscsi.j2 dest=/etc/tgt/conf.d/iscsi.conf mode=0644
+    template: src=./iscsi.{{item}}.j2 dest=/etc/tgt/conf.d/iscsi.conf mode=0644
+    with_items:
+      - "1"
+      - "2"
+      - "3"  
   - name: Updating TGT service
     service: name=tgt state=restarted
