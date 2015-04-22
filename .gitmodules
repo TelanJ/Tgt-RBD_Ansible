@@ -1,0 +1,3 @@
+[submodule "library"]
+	path = ansible-modules-extras
+	url = git@github.com:AcalephStorage/ansible-modules-extras.git
