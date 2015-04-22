@@ -15,10 +15,7 @@
     register: rbd_create
   - debug: var=rbd_create
   - name: Adding Target
-    command: echo "<target 192.168.200.90:iscsi>" >> /etc/tgt/targets.conf
-    command: echo "     driver iscsi" >> /etc/tgt/targets.conf
-    command: echo "     bs-type rbd" >> /etc/tgt/targets.conf
-    command: echo "     backing-store iscsi/iscsi-rbd" >> /etc/tgt/targets.conf
-    command: echo "     initiator-address 192.168.200.90" + >> /etc/tgt/targets.conf
-    command: echo "</target>" >> /etc/tgt/targets.conf
+    lineinfile: dest=/etc/tgt/targets.conf insertafter=EOF line='<target {{target_ip}}:iscsi>'
+    lineinfile: dest=/etc/tgt/targets.conf insertafter=EOF line='\tdriver iscsi\n\tbs-type rbd\n\tbacking-store iscsi/iscsi-rbd\n\tinitiator-address {{target_ip}}\n</target>'
   - name: Updating TGT service
+    service: name=tgt state=restarted
