@@ -7,7 +7,7 @@
       - tgt
     sudo: yes
   - name: Creating osd pool iscsi
-    ceph_osd_pool: state=present name=iscsi.{{item}} pgnum=128 pgpnum=128
+    ceph_osd_pool: state=present name=iscsi.{{item}} pgnum=32 pgpnum=32
     register: add_result
     with_items:
       - "1"
