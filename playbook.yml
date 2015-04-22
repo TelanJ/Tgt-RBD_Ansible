@@ -30,4 +30,5 @@
       - "2"
       - "3"  
   - name: Updating TGT service
+    sudo: yes
     service: name=tgt state=restarted
