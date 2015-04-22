@@ -23,7 +23,8 @@
       - "3"    
   - debug: var=rbd_create
   - name: Adding Target
-    template: src=./iscsi.j2 dest=/etc/tgt/conf.d/iscsi-{{item}}.conf mode=0644
+    sudo: yes
+    template: src=./iscsi.j2 dest=/etc/tgt/conf.d/iscsi-{{item}}.conf
     with_items:
       - "1"
       - "2"
