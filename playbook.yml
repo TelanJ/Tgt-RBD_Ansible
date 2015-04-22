@@ -1,0 +1,20 @@
+---
+- hosts: default
+  sudo: true
+  tasks:
+    sudo: yes
+  - name: Install required packages
+    apt: pkg={{item}}
+    with_items:
+      - tgt
+    sudo: yes
+  - ceph_osd_pool: state=present name=iscsi pgnum=128 pgpnum=128
+    register: add_result
+  - debug: var=add_result
+  - ceph: cmd=status
+    register: status
+  - debug: var=status
+  - ceph_rbd: name=iscsi-rbd state=present size={{rbd_size}} pool=iscsi
+    register: rbd_create
+  - debug: var=rbd_create
+  
