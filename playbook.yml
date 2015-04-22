@@ -6,15 +6,20 @@
     with_items:
       - tgt
     sudo: yes
-  - name: Creating osd pool iscsi
-    ceph_osd_pool: state=present name=iscsi pgnum=128 pgpnum=128
-    register: add_result
-  - debug: var=add_result
-  - name: Creating RBD image iscsi-rbd
-    ceph_rbd: name=iscsi-rbd state=present size={{rbd_size}} pool=iscsi
-    register: rbd_create
-  - debug: var=rbd_create
-  - name: Adding Target
-    template: src=./iscsi.j2 dest=/etc/tgt/conf.d/iscsi.conf mode=0644
-  - name: Updating TGT service
-    service: name=tgt state=restarted
+  - name:Creating multiple Target
+    - name: Creating osd pool iscsi
+      ceph_osd_pool: state=present name=iscsi.{{item}} pgnum=128 pgpnum=128
+      register: add_result
+    - debug: var=add_result
+    - name: Creating RBD image iscsi-rbd.{{item}}
+      ceph_rbd: name=iscsi-rbd.{{item}} state=present size={{rbd_size}} pool=iscsi.{{item}}
+      register: rbd_create
+    - debug: var=rbd_create
+    - name: Adding Target
+      template: src=./iscsi.j2 dest=/etc/tgt/conf.d/iscsi.conf mode=0644
+    - name: Updating TGT service
+      service: name=tgt state=restarted
+    with_items:
+      - 1
+      - 2
+      - 3
