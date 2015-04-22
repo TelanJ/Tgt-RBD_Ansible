@@ -6,7 +6,7 @@ ansible_ssh_user=vagrant
 ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
 fsid=4a158d27-f750-41d5-9e7f-26ce4c9d2d45
 rbd_size=8192
-init_sub=192.168.200
+init_ip=192.168.200.1
 target_ip=192.168.200.90
 
 

@@ -1,6 +1,6 @@
-<target {{target_ip}}:iscsi>
+<target {{target_ip}}:iscsi.{{item}}>
   driver iscsi
   bs-type rbd
   backing-store iscsi.{{item}}/iscsi-rbd.{{item}}
-  initiator-address {{init_sub}}.{{item}}
+  initiator-address {{init_ip}}
 </target>
